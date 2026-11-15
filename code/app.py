@@ -19,6 +19,13 @@ import smap_timeseries as sts  # noqa: E402  (cache location + valid slots)
 import weather_features as wf  # noqa: E402  (NASA POWER weather from NASAHackathon2026/APIs)
 import xgboost_model as xm  # noqa: E402
 
+# Streamlit keeps imported modules in memory between runs, so an edit to these helper files would not
+# show up until the server is restarted (it gave "no attribute"/"unexpected keyword" errors). Reload
+# them on every run (they are small) so the app always uses the code on disk.
+import importlib  # noqa: E402
+for _mod in (sts, wf):
+    importlib.reload(_mod)
+
 # extra model inputs the user can switch on or off (all look BACK from each SMAP time, no leakage)
 WEATHER_LABELS = {
     "rain_7d": "Rain, last 7 days (mm)",
